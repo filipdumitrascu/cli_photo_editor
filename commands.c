@@ -37,10 +37,13 @@ void load(format *img)
 
 	skip_comment(fin);
 	fscanf(fin, "%s", img->word);
+
 	skip_comment(fin);
 	fscanf(fin, "%d %d", &img->width, &img->height);
+
 	skip_comment(fin);
 	fscanf(fin, "%d", &img->max);
+
 	skip_comment(fin);
 
 	/**
@@ -58,10 +61,12 @@ void load(format *img)
 	/**
 	 * Checks if the image is ascii or binary and loads it accordingly
 	 */
-	if ((!strcmp(img->word, "P2") || !strcmp(img->word, "P3")))
+	if ((!strcmp(img->word, "P2") || !strcmp(img->word, "P3"))) {
 		read_ascii(img, fin);
-	else
+
+	} else {
 		read_binary(img, fin, filename);
+	}
 
 	printf("Loaded %s\n", filename);
 
@@ -82,14 +87,16 @@ void select(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
-		return;
+	if (no_image(img)) {
+		return;	
+	}
 
 	/**
 	 * Case "SELECT\n" is treated
 	 */
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%s", s1);
 	if (!strcmp(s1, "ALL")) {
@@ -101,43 +108,53 @@ void select(format *img)
 	 * For every parameter checks if it's valid
 	 * and if there's another one after it
 	 */
-	if (invalid_param(s1))
+	if (invalid_param(s1)) {
 		return;
+	}
 
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%s", s2);
-	if (invalid_param(s2))
+	if (invalid_param(s2)) {
 		return;
+	}
 
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%s", s3);
-	if (invalid_param(s3))
+	if (invalid_param(s3)) {
 		return;
+	}
 
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%s", s4);
-	if (invalid_param(s4))
+	if (invalid_param(s4)) {
 		return;
+	}
 
-	if (line_not_finished())
+	if (line_not_finished()) {
 		return;
+	}
 
 	/**
 	 * Converts the strings to integers and select them in the correct order
 	 */
 	int x1 = atoi(s1), y1 = atoi(s2), x2 = atoi(s3), y2 = atoi(s4);
 
-	if (x1 > x2)
+	if (x1 > x2) {
 		swap(&x1, &x2);
+	}
 
-	if (y1 > y2)
+	if (y1 > y2) {
 		swap(&y1, &y2);
+	}
 
 	if (x1 >= 0 && y1 >= 0 && x2 <= img->width && y2 <= img->height &&
 		x1 != x2 && y1 != y2) {
@@ -160,30 +177,34 @@ void histogram(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	/**
 	 * Case "HISTOGRAM\n" is treated
 	 */
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%d", &x);
 
 	/**
 	 * Case "HISTOGRAM <x>\n" is treated
 	 */
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	scanf("%d", &y);
 
 	/**
 	 * Case "HISTOGRAM <x> <y>..." is treated
 	 */
-	if (line_not_finished())
+	if (line_not_finished()) {
 		return;
+	}
 
 	if (strcmp(img->word, "P2") && strcmp(img->word, "P5")) {
 		printf("Black and white image needed\n");
@@ -202,16 +223,20 @@ void histogram(format *img)
 	/**
 	 * Calculates the frequency of every bin
 	 */
-	for (int i = 0; i < img->height; i++)
-		for (int j = 0; j < img->width; j++)
+	for (int i = 0; i < img->height; i++) {
+		for (int j = 0; j < img->width; j++) {
 			freq[(int)img->gray[i][j] / bins]++;
+		}
+	}
 
 	/**
 	 * Calculates the maximum frequency
 	 */
-	for (int i = 0; i < y; i++)
-		if (freq[i] > max)
+	for (int i = 0; i < y; i++) {
+		if (freq[i] > max) {
 			max = freq[i];
+		}
+	}
 
 	/**
 	 * Displays the histogram
@@ -220,8 +245,10 @@ void histogram(format *img)
 		int stars = round(freq[val] * x / max);
 		printf("%d\t|\t", stars);
 
-		for (int i = 0; i < stars; i++)
+		for (int i = 0; i < stars; i++) {
 			printf("*");
+		}
+
 		printf("\n");
 	}
 
@@ -233,8 +260,9 @@ void equalize(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	if (strcmp(img->word, "P2") && strcmp(img->word, "P5")) {
 		printf("Black and white image needed\n");
@@ -247,9 +275,11 @@ void equalize(format *img)
 	/**
 	 * Calculates the frequency of every bin
 	 */
-	for (int i = 0; i < img->height; i++)
-		for (int j = 0; j < img->width; j++)
+	for (int i = 0; i < img->height; i++) {
+		for (int j = 0; j < img->width; j++) {
 			freq[(int)img->gray[i][j]]++;
+		}
+	}
 
 	/**
 	 * Calculates the equalized level
@@ -257,8 +287,9 @@ void equalize(format *img)
 	double sum = 0.0;
 	for (int i = 0; i < img->height; i++) {
 		for (int j = 0; j < img->width; j++) {
-			for (int l = 0; l <= img->gray[i][j]; l++)
+			for (int l = 0; l <= img->gray[i][j]; l++) {
 				sum += freq[l];
+			}
 
 			int area = img->height * img->width;
 			double level = (MAX_ASCII * sum) / area;
@@ -278,8 +309,9 @@ void rotate(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	scanf("%d", &angle);
 	cpy = angle;
@@ -299,11 +331,12 @@ void rotate(format *img)
 		return;
 	}
 
-	if (angle == -CIRCLE || angle == CIRCLE)
+	if (angle == -CIRCLE || angle == CIRCLE) {
 		angle = 0;
-
-	else if (angle < 0)
+	
+	} else if (angle < 0) {
 		angle += CIRCLE;
+	}
 
 	/**
 	 * Depending on the angle, rotates the image right, down or to the left
@@ -357,8 +390,9 @@ void crop(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	/**
 	 * Resizes the matrices according to current selection
@@ -393,14 +427,16 @@ void apply(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	/**
 	 * Case "APPLY\n" is treated
 	 */
-	if (end_of_line())
+	if (end_of_line()) {
 		return;
+	}
 
 	/**
 	 * Declares EDGE, SHARPEN, BLUR and GAUSSIAN BLUR kernels
@@ -432,23 +468,31 @@ void apply(format *img)
 	 */
 	if (!strcmp(parameter, "EDGE")) {
 		filter(&*img, kernel1, &ok);
-		if (ok)
+		
+		if (ok) {
 			printf("APPLY EDGE done\n");
+		}
 
 	} else if (!strcmp(parameter, "SHARPEN")) {
 		filter(&*img, kernel2, &ok);
-		if (ok)
+
+		if (ok) {
 			printf("APPLY SHARPEN done\n");
+		}
 
 	} else if (!strcmp(parameter, "BLUR")) {
 		filter(&*img, kernel3, &ok);
-		if (ok)
+
+		if (ok) {
 			printf("APPLY BLUR done\n");
+		}
 
 	} else if (!strcmp(parameter, "GAUSSIAN_BLUR")) {
 		filter(&*img, kernel4, &ok);
-		if (ok)
+		
+		if (ok) {
 			printf("APPLY GAUSSIAN_BLUR done\n");
+		}
 
 	} else {
 		printf("APPLY parameter invalid\n");
@@ -462,8 +506,9 @@ void save(format *img)
 	/**
 	 * Checks if there is any image loaded
 	 */
-	if (no_image(img))
+	if (no_image(img)) {
 		return;
+	}
 
 	char *filename, chr;
 	scanf("%ms", &filename);
@@ -473,8 +518,9 @@ void save(format *img)
 	if (!fout) {
 		printf("Failed to save %s\n", filename);
 
-		while (chr != '\n')
+		while (chr != '\n') {
 			scanf("%c", &chr);
+		}
 
 		free(filename);
 		return;
@@ -484,14 +530,16 @@ void save(format *img)
 	 * Depending on the existence of a word after the file
 	 * name, load the image ascii or binary
 	 */
-	if (chr == ' ')
+	if (chr == ' ') {
 		scanf("%c", &chr);
+	}
 
-	if (chr == '\n')
+	if (chr == '\n') {
 		write_binary(img, fout, filename);
-
-	else
+	
+	} else {
 		write_ascii(img, fout);
+	}
 
 	printf("Saved %s\n", filename);
 	free(filename);

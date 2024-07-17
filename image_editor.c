@@ -52,8 +52,9 @@ int main(void)
 			 * Reads the remaining characters until encountering '\n'
 			 */
 			scanf("%c", &chr);
-			while (chr != '\n')
+			while (chr != '\n') {
 				scanf("%c", &chr);
+			}
 		}
 
 		free(command);

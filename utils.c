@@ -37,8 +37,9 @@ void free_matrix(double ***matrix, int rows)
 	/**
 	 * Frees all the rows of the matrix and the array of pointers
 	 */
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < rows; i++) {
 		free((*matrix)[i]);
+	}
 	free(*matrix);
 }
 
@@ -56,9 +57,11 @@ void resize_matrix(format *img, double ***matrix)
 	/**
 	 * Assigns the values in the new matrix according to the selection
 	 */
-	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < columns; j++)
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
 			new[i][j] = (*matrix)[i + img->y1][j + img->x1];
+		}
+	}
 
 	/**
 	 * Frees the original matrix from the memory and
@@ -77,15 +80,18 @@ void skip_comment(FILE *fin)
 	 * If the line starts with # it is consumed from the buffer otherwise
 	 * move the reading back one character to be stored in the matrix
 	 */
-	if (!strcmp(&chr, "\n"))
+	if (!strcmp(&chr, "\n")) {
 		fscanf(fin, "%c", &chr);
+	}
 
-	if (!strcmp(&chr,  "#"))
-		while (strcmp(&chr, "\n"))
+	if (!strcmp(&chr,  "#")) {
+		while (strcmp(&chr, "\n")) {
 			fscanf(fin, "%c", &chr);
+		}
 
-	else
+	} else {
 		fseek(fin, -1, SEEK_CUR);
+	}
 }
 
 int no_image(format *img)
@@ -98,8 +104,10 @@ int no_image(format *img)
 		 * If there is no image, the rest of the chars are read from the line
 		 */
 		scanf("%c", &chr);
-		while (chr != '\n')
+
+		while (chr != '\n') {
 			scanf("%c", &chr);
+		}
 
 		return 1;
 	}
@@ -115,6 +123,7 @@ int end_of_line(void)
 	 * If the next char is the end of the line this is an invalid command
 	 */
 	scanf("%c", &chr);
+
 	if (chr == '\n') {
 		printf("Invalid command\n");
 		return 1;
@@ -131,12 +140,13 @@ int line_not_finished(void)
 	 * If the line is not finished this is an ivalid command
 	 */
 	scanf("%c", &chr);
+
 	if (chr != '\n') {
 		printf("Invalid command\n");
 
-		while (chr != '\n')
+		while (chr != '\n') {
 			scanf("%c", &chr);
-
+		}
 		return 1;
 	}
 
@@ -158,11 +168,12 @@ double clamp(double sum)
 	/**
 	 * Fits the sum between 0 and 255
 	 */
-	if (sum < 0)
+	if (sum < 0) {
 		sum = 0;
 
-	else if (sum > MAX_ASCII)
+	} else if (sum > MAX_ASCII) {
 		sum = MAX_ASCII;
+	}
 
 	return sum;
 }

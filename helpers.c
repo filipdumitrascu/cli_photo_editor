@@ -10,13 +10,17 @@ void read_ascii(format *img, FILE *fin)
 	/**
 	 * Reads from the file and stores the values in the grayscale/rgb matrices
 	 */
-	for (int i = 0; i < img->height; i++)
-		for (int j = 0; j < img->width; j++)
-			if (!strcmp(img->word, "P2"))
+	for (int i = 0; i < img->height; i++) {
+		for (int j = 0; j < img->width; j++) {
+			if (!strcmp(img->word, "P2")) {
 				fscanf(fin, "%lf", &img->gray[i][j]);
-			else
+			
+			} else {
 				fscanf(fin, "%lf %lf %lf", &img->red[i][j], &img->green[i][j],
 					   &img->blue[i][j]);
+			}
+		}
+	}
 }
 
 void read_binary(format *img, FILE *fin, char *filename)
@@ -35,7 +39,7 @@ void read_binary(format *img, FILE *fin, char *filename)
 	/**
 	 * Reads the binary values
 	 */
-	for (int i = 0; i < img->height; i++)
+	for (int i = 0; i < img->height; i++) {
 		for (int j = 0; j < img->width; j++) {
 			if (!strcmp(img->word, "P5")) {
 				_uc temp;
@@ -53,6 +57,7 @@ void read_binary(format *img, FILE *fin, char *filename)
 				img->blue[i][j] = (double)temp3;
 			}
 		}
+	}
 
 	fclose(bin);
 }
@@ -65,9 +70,12 @@ void all(format *img)
 	 * Case "SELECT ALL..." is treated
 	 */
 	scanf("%c", &chr);
-	if (chr == ' ')
-		if (line_not_finished())
+
+	if (chr == ' ') {
+		if (line_not_finished()) {
 			return;
+		}
+	}
 
 	img->x1 = 0;
 	img->y1 = 0;
@@ -83,21 +91,25 @@ int is_integer(char *string)
 	/**
 	 * Checks if the string is only a minus
 	 */
-	if ((string[i] == '-' && string[i + 1] == '\0'))
+	if ((string[i] == '-' && string[i + 1] == '\0')) {
 		return 0;
+	}
 
 	/**
 	 * Jumps over the minus
 	 */
-	if (string[i] == '-')
+	if (string[i] == '-') {
 		i++;
+	}
 
 	/**
 	 * If it finds a char that is not an int, the string is not an int
 	 */
-	for (; string[i] != '\0'; i++)
-		if (string[i] < '0' || string[i] > '9')
+	for (; string[i] != '\0'; i++) {
+		if (string[i] < '0' || string[i] > '9') {
 			return 0;
+		}
+	}
 
 	return 1;
 }
@@ -113,8 +125,10 @@ int invalid_param(char *string)
 		printf("Invalid command\n");
 
 		scanf("%c", &chr);
-		while (chr != '\n')
+
+		while (chr != '\n') {
 			scanf("%c", &chr);
+		}
 
 		return 1;
 	}
@@ -136,9 +150,11 @@ void right(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = 0; i < img->height; i++)
-			for (int j = 0; j < img->width; j++)
+		for (int i = 0; i < img->height; i++) {
+			for (int j = 0; j < img->width; j++) {
 				temp[j][img->height - 1 - i] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory and
@@ -157,16 +173,20 @@ void right(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				temp[j - img->x1][img->y2 - 1 - i] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Puts the rotated values on the selected part in the original matrix
 		 */
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				(*matrix)[i][j] = temp[i - img->y1][j - img->x1];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory
@@ -189,9 +209,11 @@ void down(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = 0; i < img->height; i++)
-			for (int j = 0; j < img->width; j++)
+		for (int i = 0; i < img->height; i++) {
+			for (int j = 0; j < img->width; j++) {
 				temp[img->height - 1 - i][img->width - 1 - j] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory and
@@ -210,16 +232,20 @@ void down(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				temp[img->y2 - 1 - i][img->x2 - 1 - j] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Puts the rotated values on the selected part in the original matrix
 		 */
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				(*matrix)[i][j] = temp[i - img->y1][j - img->x1];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory
@@ -242,9 +268,11 @@ void left(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = 0; i < img->height; i++)
-			for (int j = 0; j < img->width; j++)
+		for (int i = 0; i < img->height; i++) {
+			for (int j = 0; j < img->width; j++) {
 				temp[img->width - 1 - j][i] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory and
@@ -263,16 +291,20 @@ void left(format *img, double ***matrix)
 		/**
 		 * Assigns the rotated values directly to a new matrix
 		*/
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				temp[img->x2 - 1 - j][i - img->y1] = (*matrix)[i][j];
+			}
+		}
 
 		/**
 		 * Puts the rotated values on the selected part in the original matrix
 		 */
-		for (int i = img->y1; i < img->y2; i++)
-			for (int j = img->x1; j < img->x2; j++)
+		for (int i = img->y1; i < img->y2; i++) {
+			for (int j = img->x1; j < img->x2; j++) {
 				(*matrix)[i][j] = temp[i - img->y1][j - img->x1];
+			}
+		}
 
 		/**
 		 * Frees the original matrix from the memory
@@ -303,7 +335,7 @@ void filter(format *img, double kernel[KERNEL][KERNEL], int *ok)
 	/**
 	 * Calculates the filtered value in a temp matrix
 	 */
-	for (int i = img->y1; i < img->y2; i++)
+	for (int i = img->y1; i < img->y2; i++) {
 		for (int j = img->x1; j < img->x2; j++) {
 			double s1 = 0, s2 = 0, s3 = 0;
 
@@ -321,18 +353,22 @@ void filter(format *img, double kernel[KERNEL][KERNEL], int *ok)
 				temp_blue[i - img->y1][j - img->x1] = clamp(s3);
 			}
 		}
+	}
 
 	/**
 	 * Only if the pixel is not on the edge assigns the value
 	 */
-	for (int i = img->y1; i < img->y2; i++)
-		for (int j = img->x1; j < img->x2; j++)
-			if (i != 0 && j != 0)
+	for (int i = img->y1; i < img->y2; i++) {
+		for (int j = img->x1; j < img->x2; j++) {
+			if (i != 0 && j != 0) {
 				if (i != img->height - 1 && j != img->width - 1) {
 					img->red[i][j] = temp_red[i - img->y1][j - img->x1];
 					img->green[i][j] = temp_green[i - img->y1][j - img->x1];
 					img->blue[i][j] = temp_blue[i - img->y1][j - img->x1];
 				}
+			}
+		}
+	}
 
 	/**
 	 * Frees the temporary matrices
@@ -355,10 +391,12 @@ void write_ascii(format *img, FILE *fout)
 	 * Stores in the file the specific values for image
 	 * type, width, height and max pixel value
 	 */
-	if (!strcmp(img->word, "P2") || !strcmp(img->word, "P5"))
+	if (!strcmp(img->word, "P2") || !strcmp(img->word, "P5")) {
 		fprintf(fout, "P2\n");
-	else
+
+	} else {
 		fprintf(fout, "P3\n");
+	}
 
 	fprintf(fout, "%d %d\n", img->width, img->height);
 	fprintf(fout, "%d\n", img->max);
@@ -367,7 +405,7 @@ void write_ascii(format *img, FILE *fout)
 	 * Stores the matrices ascii in the file
 	 */
 	for (int i = 0; i < img->height; i++) {
-		for (int j = 0; j < img->width; j++)
+		for (int j = 0; j < img->width; j++) {
 			if (!strcmp(img->word, "P2") || !strcmp(img->word, "P5")) {
 				fprintf(fout, "%d ", (int)round(img->gray[i][j]));
 
@@ -376,8 +414,11 @@ void write_ascii(format *img, FILE *fout)
 				fprintf(fout, "%d ", (int)round(img->green[i][j]));
 				fprintf(fout, "%d ", (int)round(img->blue[i][j]));
 			}
+		}
+
 		fprintf(fout, "\n");
 	}
+
 	fclose(fout);
 }
 

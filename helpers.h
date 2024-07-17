@@ -90,7 +90,7 @@ void write_ascii(format *img, FILE *fout);
  * 
  * @param img the image
  * @param fout the file
- * @param filename the filename
+ * @param filename the file name
  */
 void write_binary(format *img, FILE *fout, char *filename);
 

@@ -5,7 +5,7 @@
 #include "helpers.h"
 
 /**
- * @brief The function loads in the memory a new image.
+ * @brief The function loads in the memory a new image
  * 
  * @param img the image
  */

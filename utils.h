@@ -64,22 +64,22 @@ void free_matrix(double ***matrix, int rows);
  * @brief Resizes the dimensions of a matrix
  * 
  * @param img the image
- * @param matrix the matix 
+ * @param matrix the matrix 
  */
 void resize_matrix(format *img, double ***matrix);
 
 /**
- * @brief Skips the commented line from the file
+ * @brief Skips the commented line from a file
  * 
  * @param fin the file
  */
 void skip_comment(FILE *fin);
 
 /**
- * @brief The function cheks if there is any image loaded
+ * @brief The function checks if there is any image loaded
  * 
  * @param img the image 
- * @return int 
+ * @return int 0/1 (sort of boolean)
  */
 int no_image(format *img);
 

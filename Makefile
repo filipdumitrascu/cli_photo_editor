@@ -2,7 +2,7 @@
 
 # compiler setup
 CC=gcc
-CFLAGS=-Wall -Wextra -Wshadow -std=c99 -g
+CFLAGS=-Wall -Wextra -Wshadow -std=c99
 
 # define targets
 TARGETS=image_editor
